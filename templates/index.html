@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>잔여티 모니터링</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>골프장 잔여티 모니터링</h1>
+    <form id="monitorForm" method="POST">
+        <h3>모니터링할 날짜 선택:</h3>
+        {% for date in dates %}
+            <input type="checkbox" name="dates" value="{{ date }}"> {{ date }}<br>
+        {% endfor %}
+        <br>
+        <button type="submit" name="start">모니터링 시작</button>
+        <button type="submit" name="stop">모니터링 종료</button>
+    </form>
+    <div id="status"></div>
+
+    <script>
+        document.getElementById('monitorForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('status').innerText = '상태: ' + (result.status === 'started' ? '모니터링 시작됨' : '모니터링 종료됨');
+        };
+    </script>
+</body>
+</html>
